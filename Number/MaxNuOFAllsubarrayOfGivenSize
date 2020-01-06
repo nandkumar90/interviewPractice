@@ -1,0 +1,28 @@
+package Number;
+
+import java.util.Iterator;
+
+public class MaxNuOFAllsubarrayOfGivenSize {
+	public static void main(String[] args) {
+
+	}
+
+	void printMax(int[] arr, int k) {
+		if (arr.length < k) {
+			System.out.println("Aray sze is less than expected");
+		}
+
+		int max = Integer.MIN_VALUE;
+		// get mac for first k number
+		for (int i = 0; i < arr.length && i < k; i++) {
+			if (max < arr[i])
+				max = arr[i];
+		}
+
+		System.out.print(max + "  ");
+		for (int i = k; i < arr.length; i++) {
+             
+		}
+	}
+
+}
