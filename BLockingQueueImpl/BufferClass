@@ -1,0 +1,63 @@
+package BLockingQueueImpl;
+
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+//https://www.javacodemonk.com/how-will-you-implement-a-blocking-queue-in-java-044ee033
+
+public class BufferClass {
+	 final Lock lock = new ReentrantLock();
+	 // Conditions
+	 final Condition produce  = lock.newCondition(); 
+	 final Condition consume = lock.newCondition(); 
+
+	 final Object[] valueArr = new Object[5];
+	 int putIndex, takeIndex;
+	 int count;
+
+	 public void put(Object x) throws InterruptedException {
+	  System.out.println("count -- " + count);
+	  System.out.println("Array length -- " + valueArr.length);
+	  lock.lock();
+	  try {
+	    while (count == valueArr.length){
+	    
+	    produce.await();
+	    //System.out.println("Awaiting");
+	  }
+	   
+	   valueArr[putIndex] = x;
+	   System.out.println("Adding - " + x);
+	   if (++putIndex == valueArr.length){
+	        putIndex = 0;
+	   }
+	   // increment count
+	   ++count;
+	   consume.signal();
+	  } finally {
+	      lock.unlock();
+	  }
+	 }
+
+	    public Object take() throws InterruptedException {
+	      lock.lock();
+	      try {
+	        while (count == 0){
+	          consume.await();
+	        }
+	        Object x = valueArr[takeIndex];
+	        System.out.println("Retrieving - " + x);
+	        if (++takeIndex == valueArr.length){
+	          takeIndex = 0;
+	        }
+	        // reduce the count
+	        --count;
+	        // signal producer
+	        produce.signal();
+	        return x;
+	      } finally {
+	        lock.unlock();
+	      }
+	    }
+
+}
