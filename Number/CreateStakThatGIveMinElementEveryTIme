@@ -1,0 +1,32 @@
+package test;
+
+import java.util.Stack;
+
+public class CreateStakThatGIveMinElementEveryTIme {
+	static Stack<Integer> s = new Stack<>();
+
+	static Stack<Integer> min = new Stack<>();
+
+	public static void main(String[] args) {
+
+	}
+
+	public static void push(int n) {
+		s.push(n);
+		int top = min.pop();
+		push(top);
+		if (n < top)
+			min.push(n);
+		else
+			min.push(top);
+	}
+	
+	public static void pop() {
+		int x = s.pop();
+		min.pop();
+	}
+
+	public static int minElement() {
+		return min.peek();
+	}
+}
