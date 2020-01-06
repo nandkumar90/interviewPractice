@@ -1,0 +1,13 @@
+package BLockingQueueImpl;
+
+public class BufferClassDemo {
+	public static void main(String[] args) {
+		  BufferClass bufferClass = new BufferClass();
+		  // Creating two threads
+		  Thread producer = new Thread(new Producer(bufferClass));
+		  Thread consumer = new Thread(new Consumer(bufferClass)); 
+		  // starting threads
+		  producer.start();
+		  consumer.start();
+		 }
+}
