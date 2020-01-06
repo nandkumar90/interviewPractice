@@ -1,0 +1,133 @@
+package List;
+
+public class LinkedListReverseKNode {
+
+	static Node head;
+
+	class Node {
+
+		int data;
+		Node next;
+
+		Node(int d) {
+			data = d;
+			next = null;
+		}
+	}
+
+	/*
+	 * Reverses alternate k nodes and returns the pointer to the new head node
+	 */
+	Node kAltReverse(Node node, int k) {
+		Node current = node;
+		Node next = null, prev = null;
+		int count = 0;
+
+		/* 1) reverse first k nodes of the linked list */
+		while (current != null && count < k) {
+			next = current.next;
+			current.next = prev;
+			prev = current;
+			current = next;
+			count++;
+		}
+
+		/*
+		 * 2) Now head points to the kth node. So change next of head to (k+1)th node
+		 */
+		if (node != null) {
+			node.next = current;
+		}
+
+		/*
+		 * 3) We do not want to reverse next k nodes. So move the current pointer to
+		 * skip next k nodes
+		 */
+		count = 0;
+		while (count < k - 1 && current != null) {
+			current = current.next;
+			count++;
+		}
+
+		/*
+		 * 4) Recursively call for the list starting from current->next. And make rest
+		 * of the list as next of first node
+		 */
+		if (current != null) {
+			current.next = kAltReverse(current.next, k);
+		}
+
+		/* 5) prev is new head of the input list */
+		return prev;
+	}
+
+	void printList(Node node) {
+		while (node != null) {
+			System.out.print(node.data + " ");
+			node = node.next;
+		}
+	}
+
+	void push(int newdata) {
+		Node mynode = new Node(newdata);
+		mynode.next = head;
+		head = mynode;
+	}
+
+	public static Node reverseList(Node node) {
+		if (node == null)
+			return null;
+		Node prev = null;
+		Node next = null;
+		Node current = node;
+		while (current != null) {
+			next = current.next;
+			current.next = prev;
+			prev = current;
+			current = next;
+		}
+
+		return prev;
+	}
+
+	// reverse first k node
+	public static Node reverseFirstKNode(Node node, int k) {
+		if (node == null)
+			return null;
+		Node temp = node;
+		Node temp1 = node;
+		Node breakP = null;
+		int count = 0;
+		while (k != 0 && temp.next != null) {
+			temp = temp.next;
+			k--;
+		}
+		// point of sepration
+		Node head1 = temp.next;
+		temp.next = null;
+		Node rev = reverseList(temp1);
+		node.next = head1;
+		return rev;
+	}
+
+	public static void main(String[] args) {
+		LinkedListReverseKNode list = new LinkedListReverseKNode();
+
+		// Creating the linkedlist
+		for (int i = 5; i > 0; i--) {
+			list.push(i);
+		}
+		System.out.println("Given Linked List :");
+		list.printList(head);
+		/*
+		 * head = list.kAltReverse(head, 3); System.out.println("");
+		 * System.out.println("Modified Linked List :"); list.printList(head);
+		 */
+
+		// reverse complelte list
+		System.out.println();
+		Node change = reverseFirstKNode(head, 2);
+		list.printList(change);
+
+	}
+}
