@@ -1,0 +1,130 @@
+package Tree;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Ancestor {
+	Node temp = null;
+    Node root = null;
+	public static int k=2;
+	public static void main(String[] args) {
+
+		CreateTree createTree = new CreateTree();
+		Node node = createTree.getTree();
+		// CreateTree.inorder(node);
+		int key = 20;
+		Node target= new Node(5);
+		printKthAncestor(node, target);
+//		boolean ancestor = printAncestory(node, key);
+//		if (!ancestor) {
+//			System.out.println("ancestor not present");
+//		}
+	}
+
+	private static boolean printAncestory(Node node, int key) {
+		if (node == null)
+			return false;
+
+		if (node.key == key) {
+			System.out.println("no ancestor pracent");
+			return false;
+		}
+
+		if (node.left != null && node.left.key == key) {
+			System.out.println(node.key);
+			return true;
+		}
+
+		if (node.right != null && node.right.key == key) {
+			System.out.println(node.key);
+			return true;
+		}
+
+		return (printAncestory(node.right, key) || printAncestory(node.left, key));
+	}
+
+	public static Node printKthAncestor(Node root, Node target) {
+		if (root == null)
+			return null;
+
+		if (root.key == target.key || (printKthAncestor(root.left, target) != null)
+				|| (printKthAncestor(root.right, target) != null)) {
+			if (k > 0)
+				k--;
+
+			else if (k == 0) {
+				System.out.println("Kth Ancestoror is " + root.key);
+				return root;
+
+			}
+
+			return root;
+		}
+		return null;
+	}
+	
+	//in binary tree O(n)
+	
+	//https://www.geeksforgeeks.org/lowest-common-ancestor-binary-tree-set-1/
+	private List<Integer> path1 = new ArrayList<>(); 
+    private List<Integer> path2 = new ArrayList<>(); 
+  
+    // Finds the path from root node to given root of the tree. 
+    int findLCA(int n1, int n2) { 
+        path1.clear(); 
+        path2.clear(); 
+        return findLCAInternal(root, n1, n2); 
+    } 
+  
+    private int findLCAInternal(Node root, int n1, int n2) { 
+  
+        if (!findPath(root, n1, path1) || !findPath(root, n2, path2)) { 
+            System.out.println((path1.size() > 0) ? "n1 is present" : "n1 is missing"); 
+            System.out.println((path2.size() > 0) ? "n2 is present" : "n2 is missing"); 
+            return -1; 
+        } 
+  
+        int i; 
+        for (i = 0; i < path1.size() && i < path2.size(); i++) { 
+              
+        // System.out.println(path1.get(i) + " " + path2.get(i)); 
+            if (!path1.get(i).equals(path2.get(i))) 
+                break; 
+        } 
+  
+        return path1.get(i-1); 
+    } 
+      
+    // Finds the path from root node to given root of the tree, Stores the 
+    // path in a vector path[], returns true if path exists otherwise false 
+    private boolean findPath(Node root, int n, List<Integer> path) 
+    { 
+        // base case 
+        if (root == null) { 
+            return false; 
+        } 
+          
+        // Store this node . The node will be removed if 
+        // not in path from root to n. 
+        path.add(root.key); 
+  
+        if (root.key == n) { 
+            return true; 
+        } 
+  
+        if (root.left != null && findPath(root.left, n, path)) { 
+            return true; 
+        } 
+  
+        if (root.right != null && findPath(root.right, n, path)) { 
+            return true; 
+        } 
+  
+        // If not present in subtree rooted with root, remove root from 
+        // path[] and return false 
+        path.remove(path.size()-1); 
+  
+        return false; 
+    } 
+
+}
