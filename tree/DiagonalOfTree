@@ -1,0 +1,118 @@
+package Tree;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map.Entry;
+import java.util.Vector;
+//Time Complexity: O(n^2)
+//https://www.geeksforgeeks.org/diameter-of-a-binary-tree/
+public class DiagonalOfTree {
+	 Node root;
+	 int diameter(Node root) 
+	    { 
+	        /* base case if tree is empty */
+	        if (root == null) 
+	            return 0; 
+	  
+	        /* get the height of left and right sub trees */
+	        int lheight = height(root.left); 
+	        int rheight = height(root.right); 
+	  
+	        /* get the diameter of left and right subtrees */
+	        int ldiameter = diameter(root.left); 
+	        int rdiameter = diameter(root.right); 
+	  
+	        /* Return max of following three 
+	          1) Diameter of left subtree 
+	         2) Diameter of right subtree 
+	         3) Height of left subtree + height of right subtree + 1 */
+	        return Math.max(lheight + rheight + 1, 
+	                        Math.max(ldiameter, rdiameter)); 
+	  
+	    } 
+	  
+	    /* A wrapper over diameter(Node root) */
+	    int diameter() 
+	    { 
+	        return diameter(root); 
+	    } 
+	  
+	    /*The function Compute the "height" of a tree. Height is the 
+	      number f nodes along the longest path from the root node 
+	      down to the farthest leaf node.*/
+	    static int height(Node node) 
+	    { 
+	        /* base case tree is empty */
+	        if (node == null) 
+	            return 0; 
+	  
+	        /* If tree is not empty then height = 1 + max of left 
+	           height and right heights */
+	        return (1 + Math.max(height(node.left), height(node.right))); 
+	    } 
+	    
+	    
+	    public static void main(String args[])
+	    {
+	        /* creating a binary tree and entering the nodes */
+	        CreateTree tree = new CreateTree();
+	        Node node = tree.getTree();
+	        DiagonalOfTree diagonalOfTree = new DiagonalOfTree();
+
+	        System.out.println(diagonalOfTree.diameter(node));
+	        
+	    }
+	    
+	    //https://www.geeksforgeeks.org/diagonal-traversal-of-binary-tree/
+	    /* root - root of the binary tree 
+	       d -  distance of current line from rightmost 
+	            -topmost slope. 
+	       diagonalPrint - HashMap to store Diagonal 
+	                       elements (Passed by Reference) */
+	    static void diagonalPrintUtil(Node root,int d, 
+	            HashMap<Integer,ArrayList<Integer>> diagonalPrint){ 
+	          
+	         // Base case 
+	        if (root == null) 
+	            return; 
+	          
+	        // get the list at the particular d value 
+	        ArrayList<Integer> k = diagonalPrint.get(d); 
+	          
+	        // k is null then create a vector and store the data 
+	        if (k == null) 
+	        { 
+	            k = new ArrayList<>(); 
+	            k.add(root.key); 
+	        } 
+	          
+	        // k is not null then update the list 
+	        else
+	        { 
+	            k.add(root.key); 
+	        } 
+	          
+	        // Store all nodes of same line together as a vector 
+	        diagonalPrint.put(d,k); 
+	          
+	        // Increase the vertical distance if left child 
+	        diagonalPrintUtil(root.left, d + 1, diagonalPrint); 
+	           
+	        // Vertical distance remains same for right child 
+	        diagonalPrintUtil(root.right, d, diagonalPrint); 
+	    } 
+	      
+	    // Print diagonal traversal of given binary tree 
+	    static void diagonalPrint(Node root) 
+	    { 
+	        // create a map of vectors to store Diagonal elements 
+	        HashMap<Integer,ArrayList<Integer>> diagonalPrint = new HashMap<>(); 
+	        diagonalPrintUtil(root, 0, diagonalPrint); 
+	          
+	        System.out.println("Diagonal Traversal of Binnary Tree"); 
+	        for (Entry<Integer, ArrayList<Integer>> entry : diagonalPrint.entrySet()) 
+	        { 
+	            System.out.println(entry.getValue()); 
+	        } 
+	    } 
+}
