@@ -1,0 +1,75 @@
+package Tree;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class LowestCommonAncestor {
+	static List<Node> path1 = new ArrayList<>();
+	static List<Node> path2 = new ArrayList<>();
+
+	public static void main(String[] args) {
+		CreateTree createTree = new CreateTree();
+		Node x = createTree.getTree();
+		Node node = getCommonAncestor(x, 4, 3);
+		if (node == null) {
+			System.out.println("common ancestor is not present");
+		}
+		
+		else {
+			System.out.println(node.key);
+		}
+
+	}
+
+	public static Node getCommonAncestor(Node root, int one, int two) {
+		List<Node> p1 = getTraversalPath(root, one, path1);
+		List<Node> p2 = getTraversalPath(root, two, path2);
+		int i = 0, j = 0;
+		while (p1.size() > i && p2.size() > j) {
+			if (p1.get(i) == p2.get(j)) {
+				System.out.println("common ancestor " + p1.get(i));
+				return root;
+			}
+			i++;
+			j++;
+		}
+		return null;
+
+	}
+
+	public static List<Node> getTraversalPath(Node root, int target, List<Node> pat) {
+		if (root == null) {
+			return path1;
+		}
+		pat.add(root);
+		if (root.key == target) {
+			return path1;
+		}
+
+		if (target < root.key) {
+			getTraversalPath(root.left, target, pat);
+		} else {
+			getTraversalPath(root.right, target, pat);
+		}
+		return pat;
+	}
+	//O(h)
+	//assumption here is both the node would be present in tree
+	 public Node lca(Node root, Node n1, Node n2){
+	        if(root == null){
+	            return null;
+	        }
+	        if(root == n1 || root == n2){
+	            return root;
+	        }
+	        
+	        Node left = lca(root.left, n1, n2);
+	        Node right = lca(root.right, n1, n2);
+
+	        if(left != null && right != null){
+	            return root;
+	        }
+	        return left != null ? left : right;
+	    }
+
+}
