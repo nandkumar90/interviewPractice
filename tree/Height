@@ -1,0 +1,11 @@
+package Tree;
+
+public class Height {
+	public static int getHeight(Node left) {
+		if (left == null)
+			return 0;
+		return 1 + Math.max(getHeight(left.left), getHeight(left.right));
+	}
+
+	int h;
+}
