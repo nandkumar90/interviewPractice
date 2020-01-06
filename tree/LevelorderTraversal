@@ -1,0 +1,44 @@
+package Tree;
+
+import java.util.LinkedList;
+import java.util.Queue;
+
+public class LevelorderTraversal {
+	public static Queue<Node> q = new LinkedList<>();
+
+	public static void main(String[] args) {
+     CreateTree createTree = new CreateTree();
+     Node node = createTree.getTree();
+     node.getRight().setLeft(new Node(6));
+     node.getRight().setRight(new Node(7));     // levelOrderTraversal(node);
+     printGivenLevel(node , 2);
+     
+	}
+   
+	
+	public static void  levelOrderTraversal(Node root) {
+       q.add(root);
+		while(!q.isEmpty()) {
+			Node node = q.poll();
+			System.out.println(node.key);
+			if(node.left != null)
+				q.add(node.left);
+			if(node.right != null)
+			     q.add(node.right);
+		}		
+		
+	}
+	
+	public static void printGivenLevel(Node node, int k) {
+		
+		if(node == null)
+			return;
+		
+		if(k == 0)
+			System.out.println(node.key);
+		
+		printGivenLevel(node.left, k-1);
+		printGivenLevel(node.right, k-1);
+		
+	}
+}
