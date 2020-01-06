@@ -1,0 +1,105 @@
+package List;
+//https://www.geeksforgeeks.org/correct-the-random-pointer-in-doubly-linked-list/
+public class CorrectIncorrectPointer {
+
+	// Node of a doubly linked list
+	static class node {
+		int data;
+
+		// Pointer to next node in DLL
+		node next;
+
+		// Pointer to next node in DLL
+		node prev;
+	};
+
+	// Funciton to allocate node
+	static node newNode(int data) {
+		node temp = new node();
+		temp.data = data;
+		temp.next = temp.prev = null;
+		return temp;
+	}
+
+	// Function to correct the random pointer
+	static void correctPointer(node head) {
+		if (head == null)
+			return;
+
+		node temp = head;
+
+		// if head->next's previous is not
+		// pointing to head itself,
+		// change it.
+		if (head.next != null && head.next.prev != head) {
+			head.next.prev = head;
+			return;
+		}
+
+		// If head's previous pointer is incorrect,
+		// change it.
+		if (head.prev != null) {
+			head.prev = null;
+			return;
+		}
+
+		// Else check for remaining nodes.
+		temp = temp.next;
+		while (temp != null) {
+
+			// If node.next's previous pointer is
+			// incorrect, change it.
+			if (temp.next != null && temp.next.prev != temp) {
+				temp.next.prev = temp;
+				return;
+			}
+
+			// Else If node.prev's next pointer is
+			// incorrect, change it.
+			else if (temp.prev != null && temp.prev.next != temp) {
+				temp.prev.next = temp;
+				return;
+			}
+			System.out.print("");
+
+			// Else iterate on remaining.
+			temp = temp.next;
+		}
+	}
+
+	// Function to print the DLL
+	static void printList(node head) {
+		node temp = head;
+
+		while (temp != null) {
+
+			System.out.print(temp.data + " (");
+
+			// If prev pointer is null, print -1.
+			System.out.print((temp.prev != null ? temp.prev.data : -1) + ") ");
+
+			temp = temp.next;
+		}
+		System.out.print("\n");
+	}
+
+	// Driver Code
+	public static void main(String[] args) {
+		// Creating a DLL
+		node head = newNode(1);
+		head.next = newNode(2);
+		head.next.prev = head;
+		head.next.next = newNode(3);
+		head.next.next.prev = head;
+		head.next.next.next = newNode(4);
+		head.next.next.next.prev = head.next.next;
+
+		System.out.print("\nIncorrect Linked List: ");
+		printList(head);
+
+		correctPointer(head);
+
+		System.out.print("\nCorrected Linked List: ");
+		printList(head);
+	}
+}
