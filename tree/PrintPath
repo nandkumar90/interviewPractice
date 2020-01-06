@@ -1,0 +1,36 @@
+package Tree;
+
+import java.util.Stack;
+
+public class PrintPath {
+    public static Stack<Node> nodes = new Stack();
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+    CreateTree createTree = new CreateTree();
+    Node node = createTree.getTree();
+    node.getRight().setRight(new Node(6));
+    Node node2 = new Node(6);
+    print(node,node2);
+    
+    
+	}
+
+	
+	public static void print(Node root, Node target) {
+		if (root == null)
+			return;
+
+		nodes.add(root);
+
+		if (root.key == target.key) {
+			for (Node node : nodes) {
+				System.out.println(node.key);
+			}
+		}
+
+		print(root.left, target);
+		print(root.right, target);
+		nodes.pop();
+
+	}
+}
