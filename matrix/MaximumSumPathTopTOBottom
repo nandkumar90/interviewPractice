@@ -1,0 +1,55 @@
+package matrix;
+//https://www.geeksforgeeks.org/maximum-sum-path-matrix-top-bottom/
+public class MaximumSumPathTopTOBottom {
+	public static int N = 4, M = 4;
+
+//only diagonal moves allowed 	
+
+	
+	// Function to calculate max path in matrix
+	static int findMaxPath(int mat[][]) {
+		// To find max val in first row
+		int res = -1;
+
+		for (int i = 0; i < M; i++) 
+            res = max(res, mat[0][i]); 
+		
+		for (int i = 1; i < N; i++) {
+			//res = -1;
+			for (int j = 0; j < M; j++) {
+				// When all paths are possible
+				if (j > 0 && j < M - 1)
+					mat[i][j] += max(mat[i - 1][j - 1], mat[i - 1][j + 1]);
+
+				// When diagonal right is not possible
+				else if (j ==  M-1)
+					mat[i][j] += mat[i - 1][j - 1];
+
+				// When diagonal left is not possible
+				else if (j ==0)
+					mat[i][j] += mat[i - 1][j + 1];
+
+				// Store max path sum
+				res = max(mat[i][j], res);
+			}
+		}
+		return res;
+	}
+	
+	private static int max(int i, int j) {
+		return i >= j ? i : j;
+	}
+
+	// Driver code
+	public static void main(String[] args) {
+
+		int mat[][] = { { 5, 6, 1, 7 }, 
+				        { -2, 10, 8, -1 }, 
+				        { 3, -7, -9, 11 }, 
+				        { 12, -4, 2, 6 } };
+		int n = 4;
+
+		System.out.println("Maximum Sum = " + findMaxPath(mat));
+
+	}
+}
