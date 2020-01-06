@@ -1,0 +1,176 @@
+package Tree;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Queue;
+import java.util.Set;
+import java.util.TreeMap;
+
+public class LeftViewOfTree {
+	static int max_level = 0;
+	static Node root;
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		CreateTree createTree = new CreateTree();
+		 leftView(createTree.getTree());
+		// rightView(createTree.getTree());
+		// botomVieOfTree(createTree.getTree(), 0);
+		//root = createTree.getTree();
+		//bottomView();
+
+	}
+
+	// recursive function to print left view
+	public static void leftViewUtil(Node node, int level) {
+		// Base Case
+		if (node == null)
+			return;
+
+		// If this is the first node of its level
+		if (max_level < level) {
+			System.out.print(" " + node.key);
+			max_level = level;
+		}
+
+		// Recur for left and right subtrees
+		leftViewUtil(node.left, level + 1);
+		leftViewUtil(node.right, level + 1);
+	}
+
+	// A wrapper over leftViewUtil()
+	public static void leftView(Node root) {
+		leftViewUtil(root, 1);
+	}
+
+	public static void rightViewUtil(Node node, int level) {
+
+		// Base Case
+		if (node == null)
+			return;
+
+		// If this is the last Node of its level
+		if (max_level < level) {
+			System.out.print(node.key + " ");
+			max_level = level;
+		}
+
+		// Recur for right subtree first, then left subtree
+		rightViewUtil(node.right, level + 1);
+		rightViewUtil(node.left, level + 1);
+	}
+
+	public static void rightView(Node root) {
+		rightViewUtil(root);
+	}
+
+	// A wrapper over rightViewUtil()
+	public static void rightViewUtil(Node node) {
+		rightViewUtil(node, 1);
+	}
+
+	int hd = 0;
+
+	public static void botomVieOfTree(Node root, int hd) {
+		Queue<Node> queue = new LinkedList<>();
+		HashMap<Integer, Integer> map = new HashMap<>();
+		Node temp = root;
+
+		temp.setHd(hd);
+		queue.add(root);
+		while (!queue.isEmpty()) {
+			temp = queue.remove();
+			map.put(temp.getHd(), temp.getKey());
+			System.out.println("in map >> " + temp.getKey());
+
+			if (temp.getLeft() != null) {
+				System.out.println(temp.getLeft().getKey());
+				temp.getLeft().setHd(hd - 1);
+				queue.add(temp.getLeft());
+			}
+			if (temp.getRight() != null) {
+				System.out.println(temp.getRight().getKey());
+				temp.getRight().setHd(hd + 1);
+				queue.add(temp.getRight());
+			}
+
+		}
+		Set<Entry<Integer, Integer>> s = map.entrySet();
+		Iterator<Entry<Integer, Integer>> itr = s.iterator();
+		// Traverse the map elements using the iterator.
+		while (itr.hasNext()) {
+			Entry<Integer, Integer> me = itr.next();
+			System.out.print(me.getValue() + " ");
+		}
+
+	}
+
+	// Method that prints the bottom view.
+	public static void bottomView() {
+		if (root == null)
+			return;
+
+		// Initialize a variable 'hd' with 0 for the root element.
+		int hd = 0;
+
+		// TreeMap which stores key value pair sorted on key value
+		Map<Integer, Integer> map = new TreeMap<>();
+
+		// Queue to store tree nodes in level order traversal
+		Queue<Node> queue = new LinkedList<Node>();
+
+		// Assign initialized horizontal distance value to root
+		// node and add it to the queue.
+		root.hd = hd;
+		queue.add(root);
+
+		// Loop until the queue is empty (standard level order loop)
+		while (!queue.isEmpty()) {
+			Node temp = queue.remove();
+
+			// Extract the horizontal distance value from the
+			// dequeued tree node.
+			hd = temp.hd;
+
+			// Put the dequeued tree node to TreeMap having key
+			// as horizontal distance. Every time we find a node
+			// having same horizontal distance we need to replace
+			// the data in the map.
+			map.put(hd, temp.key);
+
+			// If the dequeued node has a left child add it to the
+			// queue with a horizontal distance hd-1.
+			if (temp.left != null) {
+				temp.left.hd = hd - 1;
+				queue.add(temp.left);
+			}
+			// If the dequeued node has a left child add it to the
+			// queue with a horizontal distance hd+1.
+			if (temp.right != null) {
+				temp.right.hd = hd + 1;
+				queue.add(temp.right);
+			}
+		}
+
+		// Extract the entries of map into a set to traverse
+		// an iterator over that.
+		Set<Entry<Integer, Integer>> set = map.entrySet();
+
+		// Make an iterator
+		Iterator<Entry<Integer, Integer>> iterator = set.iterator();
+
+		// Traverse the map elements using the iterator.
+		while (iterator.hasNext()) {
+			Map.Entry<Integer, Integer> me = iterator.next();
+			System.out.print(me.getValue() + " ");
+		}
+	}
+	
+	
+	public void show() {
+		System.out.println("Hello");
+	}
+}
